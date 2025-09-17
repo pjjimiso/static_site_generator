@@ -1,7 +1,6 @@
 # test_htmlnode.py
 
 import unittest
-
 from htmlnode import HTMLNode, LeafNode, ParentNode
 
 
@@ -121,3 +120,4 @@ class TestHTMLNode(unittest.TestCase):
             parent_node.to_html(), 
             '<div><span><a href="http://www.thumpertherapy.com">grandchild</a></span><b>child1</b></div>'
         )
+
