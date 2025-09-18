@@ -1,11 +1,10 @@
 # main.py
 
 from textnode import TextType, TextNode
+from split_nodes import split_nodes_delimiter
 
 
 def main(): 
-    #some_text = TextNode("This is an anchor link", TextType.LINK, "https://www.thumpertherapy.com")
-    #print(some_text)
 
 
 if __name__ == "__main__": 
