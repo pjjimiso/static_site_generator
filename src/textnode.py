@@ -56,3 +56,4 @@ def text_node_to_html_node(text_node):
             )
         case _:
             raise ValueError(f"Not a valid enum type: {text_node.text_type}")
+

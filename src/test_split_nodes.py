@@ -3,9 +3,10 @@
 import unittest
 from textnode import TextNode, TextType
 from split_nodes import (
-        split_nodes_delimiter,
-        split_nodes_image, 
-        split_nodes_link,
+    split_nodes_delimiter,
+    split_nodes_image, 
+    split_nodes_link,
+    text_to_textnodes
 )
 
 
@@ -168,4 +169,34 @@ class TestSplitNodes(unittest.TestCase):
                 TextNode("doggo", TextType.IMAGE, "https://i.imgur.com/doggo.png"),
             ]
          )
+
+    def test_text_to_textnodes(self): 
+        text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        new_textnodes = text_to_textnodes(text)
+        self.assertListEqual(
+            new_textnodes,
+            [
+                TextNode("This is " , TextType.TEXT, None),
+                TextNode("text", TextType.BOLD, None),
+                TextNode(" with an ", TextType.TEXT, None),
+                TextNode("italic", TextType.ITALIC, None),
+                TextNode(" word and a ", TextType.TEXT, None),
+                TextNode("code block", TextType.CODE, None),
+                TextNode(" and an ", TextType.TEXT, None),
+                TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
+                TextNode(" and a ", TextType.TEXT, None),
+                TextNode("link", TextType.LINK, "https://boot.dev"),
+            ]
+        )
+
+    def test_empty_text_to_textnodes(self): 
+        nodes = text_to_textnodes("")
+        self.assertListEqual(
+            nodes,
+            []
+        )
+
+    def test_invalid_text_to_textnodes(self): 
+        with self.assertRaises(ValueError): 
+            nodes = text_to_textnodes("This is **not* valid markdown format!")
 
