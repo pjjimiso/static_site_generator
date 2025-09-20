@@ -1,8 +1,10 @@
-# blocktype.py
+# markdown_blocks.py
 
 import re
 from enum import Enum
-from extract_markdown import markdown_to_blocks
+from htmlnode import (
+    HTMLNode,
+)
 
 class BlockType(Enum): 
     PARAGRAPH = "paragraph"
@@ -14,7 +16,6 @@ class BlockType(Enum):
 
 
 def block_to_block_type(markdown_block): 
-    #print(markdown_block)
     if re.match(r'#{1,6}\s+.*', markdown_block):
         return BlockType.HEADING
     elif re.match(r'`{3}.*`{3}', markdown_block, re.S):
@@ -28,7 +29,6 @@ def block_to_block_type(markdown_block):
     else:
         return BlockType.PARAGRAPH
 
-
 def matches_ordered_list(markdown_block):
     i = 1
     for line in markdown_block.split('\n'):
@@ -38,4 +38,21 @@ def matches_ordered_list(markdown_block):
             return False
         i += 1
     return True
+
+def markdown_to_blocks(markdown): 
+    final_blocks = []
+    blocks = markdown.split("\n\n")
+    for block in blocks: 
+        if block == "":
+            continue
+        stripped_block = block.strip()
+        final_blocks.append(stripped_block)
+    return final_blocks
+
+def markdown_to_html_node(markdown): 
+    blocks = markdown_to_blocks(markdown)
+    for block in blocks: 
+        block_type = block_to_block_type(block)
+        HTMLNode
+
 
