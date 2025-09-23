@@ -4,7 +4,8 @@ import unittest
 from markdown_blocks import (
     BlockType,
     markdown_to_blocks,
-    block_to_block_type
+    block_to_block_type,
+    markdown_to_html_node
 )
 
 
@@ -141,4 +142,104 @@ In no particular order:
                 BlockType.UNORDERED_LIST
             ]
         )
+
+    def test_paragraph_block_to_html_node(self):
+        markdown = """
+This is **bolded** paragraph
+text in a p
+tag here
+
+This is another paragraph with _italic_ text and `code` here
+
+"""
+        node = markdown_to_html_node(markdown)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>"
+        )
+
+    def test_code_block_to_html_node(self):
+        md = """
+```
+This is text that _should_ remain
+the **same** even with inline stuff
+```
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
+        )
+
+    def test_quote_block_to_html_node(self):
+        md = """
+> To be, or not to be:
+>
+> That is the question
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html, 
+            "<div><blockquote><p>To be, or not to be: That is the question</p></blockquote></div>"
+        )
+
+    def test_heading_block_to_html_node(self):
+        md = """
+# Heading 1
+
+## Heading 2
+
+### Heading 3
+
+#### Heading 4
+
+##### Heading 5
+
+###### Heading 6
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html, 
+            "<div><h1>Heading 1</h1><h2>Heading 2</h2><h3>Heading 3</h3><h4>Heading 4</h4><h5>Heading 5</h5><h6>Heading 6</h6></div>"
+        )
+
+    def test_heading_7_block_to_html_node(self):
+        md = "####### There's No Such Thing As Heading 7"
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><p>####### There's No Such Thing As Heading 7</p></div>"
+        )
+
+    def test_unordered_list_block_to_html_node(self):
+        md = """
+- Here is a list item
+- Here is another list item
+- And another
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html, 
+            "<div><ul><li>Here is a list item</li><li>Here is another list item</li><li>And another</li></ul></div>"
+        )
+    
+    def test_ordered_list_block_to_html_node(self):
+        md = """
+1. First item
+2. Second item
+3. Third item
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html, 
+            "<div><ol><li>First item</li><li>Second item</li><li>Third item</li></ol></div>"
+        )
+
 
