@@ -4,6 +4,7 @@ import unittest
 from extract_markdown import (
     extract_markdown_images,
     extract_markdown_links,
+    extract_markdown_title,
 )
 
 
@@ -48,4 +49,27 @@ class TestExtractMarkdown(unittest.TestCase):
                 ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")
             ]
         )
+
+    def test_extract_markdown_title(self):
+        md = """
+# This is the title   
+
+## Here is a header
+
+This is paragraph text
+"""
+        title = extract_markdown_title(md)
+        self.assertEqual(
+            title,
+            "This is the title"
+        )
+
+    def test_extract_markdown_no_title(self): 
+        md = """
+## This is a header, not a title!
+
+something something something
+"""
+        with self.assertRaises(ValueError):
+            title = extract_markdown_title(md)
 

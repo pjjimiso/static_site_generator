@@ -170,7 +170,7 @@ the **same** even with inline stuff
         html = node.to_html()
         self.assertEqual(
             html,
-            "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
+            "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff</code></pre></div>",
         )
 
     def test_quote_block_to_html_node(self):
@@ -183,7 +183,7 @@ the **same** even with inline stuff
         html = node.to_html()
         self.assertEqual(
             html, 
-            "<div><blockquote><p>To be, or not to be: That is the question</p></blockquote></div>"
+            "<div><blockquote>To be, or not to be: That is the question</blockquote></div>"
         )
 
     def test_heading_block_to_html_node(self):
@@ -228,7 +228,20 @@ the **same** even with inline stuff
             html, 
             "<div><ul><li>Here is a list item</li><li>Here is another list item</li><li>And another</li></ul></div>"
         )
-    
+
+    def test_inline_markdown_inside_unordered_list_block(self): 
+        md = """
+- Here is a list item
+- Here is a **bold** item
+- Here is an _italic_ item
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><ul><li>Here is a list item</li><li>Here is a <b>bold</b> item</li><li>Here is an <i>italic</i> item</li></ul></div>"
+        )
+
     def test_ordered_list_block_to_html_node(self):
         md = """
 1. First item
