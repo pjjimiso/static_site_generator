@@ -45,10 +45,16 @@ def setup_logging():
 
 def main(): 
     setup_logging()
+
+    if len(sys.argv) == 2:
+        basepath = sys.argv[1]
+    else:
+        basepath = "/"
+
     source = "/home/pjjimiso/Projects/bootdotdev/static_site_generator/static"
     destination = "/home/pjjimiso/Projects/bootdotdev/static_site_generator/public"
     copy_files(src=source, dst=destination)
-    generate_page_recursive("content", "template.html", "public")
+    generate_page_recursive(basepath, "content", "template.html", "public")
 
 
 if __name__ == "__main__": 
