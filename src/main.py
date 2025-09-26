@@ -10,6 +10,12 @@ from generate_pages import (
 )
 
 
+dir_path_static = "./static"
+dir_path_public = "./docs"
+dir_path_content = "./content"
+template_path = "./template.html"
+
+
 def setup_logging():
     LOGGING_CONFIG = {
         'version': 1,
@@ -51,10 +57,8 @@ def main():
     else:
         basepath = "/"
 
-    #source = "/home/pjjimiso/Projects/bootdotdev/static_site_generator/static"
-    #destination = "/home/pjjimiso/Projects/bootdotdev/static_site_generator/public"
-    copy_files(src="static", dst="docs")
-    generate_page_recursive(basepath, "content", "template.html", "docs")
+    copy_files(src=dir_path_static, dst=dir_path_public)
+    generate_page_recursive(basepath, dir_path_content, template_path, dir_path_public)
 
 
 if __name__ == "__main__": 

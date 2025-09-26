@@ -32,7 +32,7 @@ def copy_files(src, dst, level=1):
 
 
 def read_file_contents(file): 
-    logging.debug(f"Reading from file {file}")
+    logger.debug(f"Reading from file {file}")
     try:
         with open(file, 'r') as f: 
             contents = f.read()
@@ -46,7 +46,7 @@ def read_file_contents(file):
 
 
 def write_file_contents(file, contents): 
-    logging.debug(f"Writing to file {file}")
+    logger.debug(f"Writing to file {file}")
     try:
         with open(file, 'w') as f: 
             f.write(contents)
@@ -74,21 +74,22 @@ def replace_basepath_links(contents, basepath):
 
 
 def generate_page(basepath, from_path, template_path, dest_path): 
-    logging.info(f"Generating page from {from_path} to {dest_path} using {template_path}")
+    logger.info(f"Generating page from {from_path} to {dest_path} using {template_path}")
     markdown_contents = read_file_contents(from_path)
     template_contents = read_file_contents(template_path)
     html_contents = replace_template_contents(markdown_contents, template_contents)
     # Required for hosting on Github pages 
-    final_contents = replace_basepath_links(html_contents, basepath)
+    if basepath != "/":
+        html_contents = replace_basepath_links(html_contents, basepath)
     file_path = Path(from_path)
     dest_file_name = file_path.stem + ".html"
     dest_file = os.path.join(dest_path, dest_file_name)
     logger.info(f"Writing page contents to {dest_file}")
-    write_file_contents(dest_file, final_contents)
+    write_file_contents(dest_file, html_contents)
 
 
 def generate_page_recursive(basepath, dir_path_content, template_path, dest_dir_path):
-    logging.info(f"Generating pages from {dir_path_content} to {dest_dir_path} using template file {template_path} and basepath {basepath}")
+    logger.info(f"Generating pages from {dir_path_content} to {dest_dir_path} using template file {template_path} and basepath {basepath}")
     for file in os.listdir(dir_path_content):
         file_path = os.path.join(dir_path_content, file)
         if os.path.isfile(file_path) and file_path.endswith(".md"):
