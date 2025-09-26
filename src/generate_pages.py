@@ -67,26 +67,34 @@ def replace_template_contents(markdown_contents, template_contents):
     return contents
 
 
-def generate_page(from_path, template_path, dest_path): 
+def replace_basepath_links(contents, basepath): 
+    logger.info(f"Replacing href and src urls with {basepath}")
+    contents = re.sub(r'(href|src)="\/', r'\1' + f'="{basepath}', contents)
+    return contents
+
+
+def generate_page(basepath, from_path, template_path, dest_path): 
     logging.info(f"Generating page from {from_path} to {dest_path} using {template_path}")
     markdown_contents = read_file_contents(from_path)
     template_contents = read_file_contents(template_path)
-    contents = replace_template_contents(markdown_contents, template_contents)
+    html_contents = replace_template_contents(markdown_contents, template_contents)
+    # Required for hosting on Github pages 
+    final_contents = replace_basepath_links(html_contents, basepath)
     file_path = Path(from_path)
     dest_file_name = file_path.stem + ".html"
     dest_file = os.path.join(dest_path, dest_file_name)
     logger.info(f"Writing page contents to {dest_file}")
-    write_file_contents(dest_file, contents)
+    write_file_contents(dest_file, final_contents)
 
 
-def generate_page_recursive(dir_path_content, template_path, dest_dir_path):
-    logging.info(f"Generating pages from {dir_path_content} to {dest_dir_path} using template file {template_path}")
+def generate_page_recursive(basepath, dir_path_content, template_path, dest_dir_path):
+    logging.info(f"Generating pages from {dir_path_content} to {dest_dir_path} using template file {template_path} and basepath {basepath}")
     for file in os.listdir(dir_path_content):
         file_path = os.path.join(dir_path_content, file)
         if os.path.isfile(file_path) and file_path.endswith(".md"):
-            generate_page(file_path, template_path, dest_dir_path)
+            generate_page(basepath, file_path, template_path, dest_dir_path)
         elif os.path.isdir(file_path):
             dest_subdir_path = os.path.join(dest_dir_path, file)
             if not os.path.exists(dest_subdir_path):
                 os.mkdir(dest_subdir_path)
-            generate_page_recursive(file_path, template_path, dest_subdir_path)
+            generate_page_recursive(basepath, file_path, template_path, dest_subdir_path)
