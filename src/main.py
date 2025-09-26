@@ -51,10 +51,10 @@ def main():
     else:
         basepath = "/"
 
-    source = "/home/pjjimiso/Projects/bootdotdev/static_site_generator/static"
-    destination = "/home/pjjimiso/Projects/bootdotdev/static_site_generator/public"
-    copy_files(src=source, dst=destination)
-    generate_page_recursive(basepath, "content", "template.html", "public")
+    #source = "/home/pjjimiso/Projects/bootdotdev/static_site_generator/static"
+    #destination = "/home/pjjimiso/Projects/bootdotdev/static_site_generator/public"
+    copy_files(src="static", dst="docs")
+    generate_page_recursive(basepath, "content", "template.html", "docs")
 
 
 if __name__ == "__main__": 
