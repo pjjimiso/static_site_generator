@@ -186,6 +186,7 @@ the **same** even with inline stuff
             "<div><blockquote>To be, or not to be: That is the question</blockquote></div>"
         )
 
+
     def test_heading_block_to_html_node(self):
         md = """
 # Heading 1
@@ -207,6 +208,7 @@ the **same** even with inline stuff
             "<div><h1>Heading 1</h1><h2>Heading 2</h2><h3>Heading 3</h3><h4>Heading 4</h4><h5>Heading 5</h5><h6>Heading 6</h6></div>"
         )
 
+
     def test_heading_7_block_to_html_node(self):
         md = "####### There's No Such Thing As Heading 7"
         node = markdown_to_html_node(md)
@@ -216,7 +218,8 @@ the **same** even with inline stuff
             "<div><p>####### There's No Such Thing As Heading 7</p></div>"
         )
 
-    def test_unordered_list_block_to_html_node(self):
+
+    def test_ulist_block_to_html_node(self):
         md = """
 - Here is a list item
 - Here is another list item
@@ -228,6 +231,21 @@ the **same** even with inline stuff
             html, 
             "<div><ul><li>Here is a list item</li><li>Here is another list item</li><li>And another</li></ul></div>"
         )
+
+
+    def test_ulist_block_with_quotes_to_html_node(self):
+        md = """
+- Regular list item
+- List item containing "quotation"
+- List item 
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            '<div><ul><li>Regular list item</li><li>List item containing "quotation"</li><li>List item</li></ul></div>'
+        )
+
 
     def test_inline_markdown_inside_unordered_list_block(self): 
         md = """

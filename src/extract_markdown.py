@@ -7,10 +7,12 @@ def extract_markdown_images(text):
     matches = re.findall(r'(?<=!)\[([\w\d\s]*)]\((\S*)\)', text)
     return matches
 
+
 def extract_markdown_links(text):
     # Match regular link pattern: [anchor text](url)
-    matches = re.findall(r'(?<!!)\[([\w\d\s]*)]\((\S*)\)', text)
+    matches = re.findall(r'(?<!!)\[([^\[\]]*)\]\((\S*)\)', text)
     return matches
+
 
 def extract_markdown_title(markdown): 
     title = ""
